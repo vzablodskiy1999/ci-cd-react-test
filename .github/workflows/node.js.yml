@@ -17,19 +17,21 @@ jobs:
         node-version: [ 18.x ]
 
     steps:
-    - uses: actions/checkout@v3
-      name: Use Node.js ${{ matrix.node-version }}
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v2
+
+    - name: setup node
+      uses: actions/setup-node@master
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
 
+    # install applicaion dependencies
     - name: Install dependencies
-    - run: npm ci
-    - name: Lint project
-    - run: npm run lint
-    - name: Build project
-    - run: npm run build --if-present
+      run: |
+        npm install
+    # build and test the apps
+    - name: build
+      run: |
+        npm run build
 
   push_to_vercel:
     runs-on: ubuntu-latest
